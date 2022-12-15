@@ -1,5 +1,5 @@
 <template>
-  <div>BABA</div>
+  <navbar />
 </template>
 
 <script setup lang="ts"></script>

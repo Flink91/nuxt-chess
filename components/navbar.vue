@@ -1,6 +1,5 @@
 <template>
-  <div>
-    index
+  <div class="bg-slate-100">
     <NuxtLink to="/"> Index page </NuxtLink>
     <NuxtLink to="/about"> About page </NuxtLink>
   </div>
