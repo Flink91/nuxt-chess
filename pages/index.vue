@@ -1,4 +1,5 @@
 <template>
+  <div><ChessBoard msg="You did it!" /></div>
   <navbar />
 </template>
 
