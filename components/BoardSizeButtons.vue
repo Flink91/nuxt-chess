@@ -11,11 +11,10 @@
 </template>
 
 <script setup lang="ts">
-// import { useTilesStore } from "@/stores/tiles";
-
 const tilesStore = useTilesStore();
 
 const addRow = () => {
+  console.log("adding row");
   tilesStore.addRow();
 };
 

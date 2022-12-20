@@ -1,63 +1,52 @@
 <script setup lang="ts">
-import ChessBoardTile from "./ChessBoardTile.vue";
+import ChessboardTile from "./ChessboardTile.vue";
 import BoardSizeButtons from "./BoardSizeButtons.vue";
-// import { useTilesStore } from "@/stores/tiles";
-import { ref } from "vue";
+import * as ChessboardUtils from "~~/utils/ChessboardUtils";
 
-const tilesStore = useTilesStore();
+const props = defineProps<{
+  title: string;
+  description?: string;
+  rows: number;
+  columns: number;
+  tilesConfig?: string[];
+  startingPosition: string;
+}>();
 
-interface TileRows {
-  [key: string]: number[];
-}
+// const tilesStore = useTilesStore();
 
-const tileRows: TileRows = {
-  // alpha character
-  h: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  g: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  f: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  e: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  d: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  c: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  b: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  a: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-  α: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-};
+// the css grid will always be 12*12
+const numOfTiles = props.rows * props.columns;
+const gridSize = props.rows;
 
-const convertTileRowsToStrings = () => {
-  let temp: string[] = [];
-  for (let key in tileRows) {
-    tileRows[key].forEach((element: string | number) => {
-      temp.push(key.toString() + element.toString());
-    });
-  }
-  return temp;
-};
-
-const tiles = ref(convertTileRowsToStrings());
-
-// the colors of the tiles have to alternate except for when the row ends
-const getTileColor = (tileID: number) => {
-  const firstDigit = tileID < 10 ? 0 : Number(String(tileID)[0]);
-  if (firstDigit % 2 == 0) {
-    return tileID % 2 == 0 ? "dark" : "light";
-  } else {
-    return tileID % 2 == 0 ? "light" : "dark";
-  }
-};
+const pieces: string[] = ChessboardUtils.convertFENToArray(
+  props.startingPosition
+);
 </script>
 
 <template>
   <div class="container">
-    <div :class="'grid-container'">
-      <ChessBoardTile
-        v-for="(tile, index) in tiles"
-        :color="getTileColor(index)"
+    <div class="infobox">
+      <h1 class="text-4xl font-bold text-gray-900 leading-tight">
+        {{ title }}
+      </h1>
+      <p>{{ description }}</p>
+      <p>{{ pieces }}</p>
+    </div>
+
+    <div class="grid-container">
+      <ChessboardTile
+        v-for="(tile, index) in numOfTiles"
+        :color="ChessboardUtils.getTileColor(index, rows, columns)"
       >
-        <img class="piece" src="~/assets/black pawn.svg" />
-        <div class="tile-text">
+        <img
+          v-if="pieces[index] !== ''"
+          class="piece"
+          :src="`/images/${pieces[index]}.svg`"
+        />
+        <!-- <div class="tile-text">
           {{ tile }}
-        </div>
-      </ChessBoardTile>
+        </div> -->
+      </ChessboardTile>
     </div>
     <BoardSizeButtons></BoardSizeButtons>
   </div>
@@ -67,15 +56,16 @@ const getTileColor = (tileID: number) => {
 .container {
   max-width: 100vw;
   max-height: auto;
+  display: flex;
+  flex-direction: row;
 }
 .grid-container {
   display: inline-grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(v-bind(gridSize), 1fr);
   margin: 0 auto;
   width: 100%;
-  max-width: 90vh;
-  max-height: 90vh;
-  aspect-ratio: 1 / 1;
+  max-width: 600px;
+  aspect-ratio: v-bind(rows) / v-bind(columns);
 }
 
 .grid {
@@ -94,7 +84,10 @@ const getTileColor = (tileID: number) => {
 }
 
 .piece {
+  position: absolute;
   width: 100%;
+  padding: 10%;
+  cursor: grab;
   aspect-ratio: 1/1;
 }
 </style>

@@ -1,10 +1,14 @@
 <template>
   <div>
-    <NuxtPage />
+    <navbar />
+    <slot />
   </div>
 </template>
 
 <style>
+body {
+  background-color: darkgray;
+}
 .router-link-active {
   color: blueviolet;
 }
