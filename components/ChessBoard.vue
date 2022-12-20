@@ -63,44 +63,28 @@ const dropPiece = (e: MouseEvent) => {
 </script>
 
 <template>
-  <div class="container">
-    <div class="infobox">
-      <h1 class="text-4xl font-bold text-gray-900 leading-tight">
-        {{ title }}
-      </h1>
-      <p>{{ description }}</p>
-      <p>{{ pieces }}</p>
-    </div>
-
-    <div
-      class="grid-container"
-      @mousedown="grabPiece"
-      @mousemove="movePiece"
-      @mouseup="dropPiece"
+  <div
+    class="grid-container"
+    @mousedown="grabPiece"
+    @mousemove="movePiece"
+    @mouseup="dropPiece"
+  >
+    <ChessboardTile
+      v-for="(tile, index) in numOfTiles"
+      :color="ChessboardUtils.getTileColor(index, rows, columns)"
     >
-      <ChessboardTile
-        v-for="(tile, index) in numOfTiles"
-        :color="ChessboardUtils.getTileColor(index, rows, columns)"
-      >
-        <!-- <img
-          v-if="pieces[index] !== ''"
-          class="piece"
-          :src="`/images/${pieces[index]}.svg`"
-        /> -->
-        <div
-          v-if="pieces[index] !== ''"
-          class="piece"
-          :style="{
-            backgroundImage: `url(/images/${pieces[index]}.svg)`,
-          }"
-        ></div>
+      <div
+        v-if="pieces[index] !== ''"
+        class="piece"
+        :style="{
+          backgroundImage: `url(/images/${pieces[index]}.svg)`,
+        }"
+      ></div>
 
-        <!-- <div class="tile-text">
+      <!-- <div class="tile-text">
           {{ tile }}
         </div> -->
-      </ChessboardTile>
-    </div>
-    <BoardSizeButtons></BoardSizeButtons>
+    </ChessboardTile>
   </div>
 </template>
 
