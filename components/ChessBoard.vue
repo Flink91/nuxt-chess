@@ -2,6 +2,7 @@
 import ChessboardTile from "./ChessboardTile.vue";
 import BoardSizeButtons from "./BoardSizeButtons.vue";
 import * as ChessboardUtils from "~~/utils/ChessboardUtils";
+import { client } from "process";
 
 const props = defineProps<{
   title: string;
@@ -21,6 +22,44 @@ const gridSize = props.rows;
 const pieces: string[] = ChessboardUtils.convertFENToArray(
   props.startingPosition
 );
+
+let activePiece: HTMLElement | null = null;
+
+const grabPiece = (e: MouseEvent) => {
+  const element = e.target as HTMLElement;
+  activePiece = element;
+  if (element.classList.contains("piece")) {
+    console.log(e);
+    const x = e.clientX;
+    const y = e.clientY;
+    console.log("found pice at", x, y);
+    element.style.position = "absolute";
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+    console.log("moving to", element.style.left, element.style.top);
+  }
+};
+
+const movePiece = (e: MouseEvent) => {
+  if (activePiece === null) return;
+
+  const element = e.target as HTMLElement;
+
+  if (element.classList.contains("piece")) {
+    const x = e.clientX;
+    const y = e.clientY;
+    console.log("found pice at", x, y);
+    element.style.position = "absolute";
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+    console.log("moving to", element.style.left, element.style.top);
+  }
+  console.log(e.clientY);
+};
+
+const dropPiece = (e: MouseEvent) => {
+  activePiece = null;
+};
 </script>
 
 <template>
@@ -33,16 +72,29 @@ const pieces: string[] = ChessboardUtils.convertFENToArray(
       <p>{{ pieces }}</p>
     </div>
 
-    <div class="grid-container">
+    <div
+      class="grid-container"
+      @mousedown="grabPiece"
+      @mousemove="movePiece"
+      @mouseup="dropPiece"
+    >
       <ChessboardTile
         v-for="(tile, index) in numOfTiles"
         :color="ChessboardUtils.getTileColor(index, rows, columns)"
       >
-        <img
+        <!-- <img
           v-if="pieces[index] !== ''"
           class="piece"
           :src="`/images/${pieces[index]}.svg`"
-        />
+        /> -->
+        <div
+          v-if="pieces[index] !== ''"
+          class="piece"
+          :style="{
+            backgroundImage: `url(/images/${pieces[index]}.svg)`,
+          }"
+        ></div>
+
         <!-- <div class="tile-text">
           {{ tile }}
         </div> -->
@@ -57,7 +109,7 @@ const pieces: string[] = ChessboardUtils.convertFENToArray(
   max-width: 100vw;
   max-height: auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .grid-container {
   display: inline-grid;
@@ -84,10 +136,16 @@ const pieces: string[] = ChessboardUtils.convertFENToArray(
 }
 
 .piece {
+  background-repeat: no-repeat;
+  background-position: center;
   position: absolute;
-  width: 100%;
-  padding: 10%;
   cursor: grab;
+  height: 80px;
+  width: 80px;
   aspect-ratio: 1/1;
+}
+.piece:active {
+  z-index: 99;
+  cursor: grabbing;
 }
 </style>
