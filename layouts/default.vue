@@ -15,6 +15,9 @@ body {
   height: 100vh;
   flex-direction: column;
 }
+.content {
+  flex-grow: 1;
+}
 .router-link-active {
   color: blueviolet;
 }

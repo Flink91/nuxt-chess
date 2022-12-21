@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <div>
-      <Chessboard
-        title="Micro Chess"
-        description="Another chess variant on a 4×5 board, Microchess, was invented by Glimne in 1997. Castling is allowed in this variant."
-        :rows="4"
-        :columns="5"
-        :starting-position="startingFEN"
-      />
-    </div>
+  <div class="content">
+    <Chessboard
+      title="Micro Chess"
+      description="Another chess variant on a 4×5 board, Microchess, was invented by Glimne in 1997. Castling is allowed in this variant."
+      :rows="7"
+      :columns="5"
+      :starting-position="startingFEN"
+    />
   </div>
 </template>
 

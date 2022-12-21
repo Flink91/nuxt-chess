@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
     <div><h1>CHESS OF THE DAY</h1></div>
 
     <ul class="list-none py-4 px-6 bg-gray-300">

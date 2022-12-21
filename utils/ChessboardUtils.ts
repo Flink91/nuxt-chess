@@ -1,3 +1,20 @@
+const setSize = (rows: number, columns: number) => {
+  const chessboardContainer: HTMLElement | null = document.getElementById(
+    "chessboard-container"
+  );
+  const windowHeight = chessboardContainer
+    ? chessboardContainer.clientHeight
+    : 0;
+  console.log(windowHeight);
+  const windowWidth = chessboardContainer ? chessboardContainer.clientWidth : 0;
+  console.log(windowHeight, windowWidth);
+  const chessboard: HTMLElement | null = document.getElementById("chessboard");
+  if (chessboard)
+    chessboard.style.width =
+      calculateSize(windowWidth, windowHeight, rows, columns) + "px";
+  console.log(calculateSize(windowWidth, windowHeight, rows, columns) + "px");
+};
+
 const calculateSize = (
   windowWidth: number,
   windowHeight: number,
@@ -5,20 +22,18 @@ const calculateSize = (
   columns: number
 ): number => {
   const isLongerThanWide: boolean = columns > rows;
+  console.log("?", isLongerThanWide);
   let size: number = isLongerThanWide
-    ? Math.min(windowWidth * (rows / columns), windowHeight * (rows / columns))
-    : Math.min(windowWidth, windowHeight);
+    ? Math.min(windowWidth, windowHeight * (rows / columns))
+    : Math.min(windowWidth, windowHeight * (rows / columns));
   return size;
 };
 
-// the colors of the tiles have to alternate except for when the row ends
+// the colors of the tiles have to alternate, adding the coordinates works
 const getTileColor = (tileID: number, rows: number, columns: number) => {
-  const curRow = Math.floor(tileID / rows);
-  if (curRow % 2 == 0) {
-    return tileID % 2 == 0 ? "light" : "dark";
-  } else {
-    return tileID % 2 == 0 ? "dark" : "light";
-  }
+  const y = Math.floor(tileID / rows);
+  const x = tileID - y * columns;
+  return (x + y) % 2 === 0 ? "light" : "dark";
 };
 
 const convertFENToArray = (fen: string): string[] => {
@@ -87,4 +102,4 @@ function isNumber(value: string | number): boolean {
   return value != null && value !== "" && !isNaN(Number(value.toString()));
 }
 
-export { getTileColor, convertFENToArray, calculateSize };
+export { getTileColor, convertFENToArray, setSize, calculateSize };

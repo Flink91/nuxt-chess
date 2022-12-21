@@ -16,21 +16,11 @@ const numOfTiles = props.rows * props.columns;
 
 //onmounted will run on client side, so window is available here
 onMounted(() => {
-  const chessboardContainer: HTMLElement | null = document.getElementById(
-    "chessboard-container"
-  );
-  const windowHeight = chessboardContainer
-    ? chessboardContainer.clientHeight
-    : 0;
-  const windowWidth = chessboardContainer ? chessboardContainer.clientWidth : 0;
-  const chessboard: HTMLElement | null = document.getElementById("chessboard");
-  if (chessboard)
-    chessboard.style.width =
-      calculateSize(windowWidth, windowHeight, props.rows, props.columns) +
-      "px";
-  console.log(
-    calculateSize(windowWidth, windowHeight, props.rows, props.columns) + "px"
-  );
+  ChessboardUtils.setSize(props.rows, props.columns);
+  window.addEventListener("resize", resizeHandler);
+  function resizeHandler(e: any) {
+    ChessboardUtils.setSize(props.rows, props.columns);
+  }
 });
 const gridSize = props.rows;
 
@@ -89,8 +79,6 @@ const dropPiece = (e: MouseEvent) => {
         v-for="(tile, index) in numOfTiles"
         :color="ChessboardUtils.getTileColor(index, rows, columns)"
       >
-      </ChessboardTile>
-      <template v-for="(tile, index) in numOfTiles">
         <div
           v-if="pieces[index] !== ''"
           class="piece"
@@ -98,7 +86,7 @@ const dropPiece = (e: MouseEvent) => {
             backgroundImage: `url(/images/${pieces[index]}.svg)`,
           }"
         ></div>
-      </template>
+      </ChessboardTile>
     </div>
   </div>
 </template>
@@ -106,6 +94,7 @@ const dropPiece = (e: MouseEvent) => {
 <style scoped>
 #chessboard-container {
   flex-grow: 1;
+  height: 100%;
 }
 #chessboard {
   display: inline-grid;
