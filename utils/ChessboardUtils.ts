@@ -1,3 +1,16 @@
+const calculateSize = (
+  windowWidth: number,
+  windowHeight: number,
+  rows: number,
+  columns: number
+): number => {
+  const isLongerThanWide: boolean = columns > rows;
+  let size: number = isLongerThanWide
+    ? Math.min(windowWidth * (rows / columns), windowHeight * (rows / columns))
+    : Math.min(windowWidth, windowHeight);
+  return size;
+};
+
 // the colors of the tiles have to alternate except for when the row ends
 const getTileColor = (tileID: number, rows: number, columns: number) => {
   const curRow = Math.floor(tileID / rows);
@@ -74,4 +87,4 @@ function isNumber(value: string | number): boolean {
   return value != null && value !== "" && !isNaN(Number(value.toString()));
 }
 
-export { getTileColor, convertFENToArray };
+export { getTileColor, convertFENToArray, calculateSize };

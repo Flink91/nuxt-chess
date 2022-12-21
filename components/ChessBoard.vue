@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import ChessboardTile from "./ChessboardTile.vue";
-import BoardSizeButtons from "./BoardSizeButtons.vue";
 import * as ChessboardUtils from "~~/utils/ChessboardUtils";
-import { client } from "process";
 
 const props = defineProps<{
   title: string;
@@ -13,10 +11,27 @@ const props = defineProps<{
   startingPosition: string;
 }>();
 
-// const tilesStore = useTilesStore();
-
 // the css grid will always be 12*12
 const numOfTiles = props.rows * props.columns;
+
+//onmounted will run on client side, so window is available here
+onMounted(() => {
+  const chessboardContainer: HTMLElement | null = document.getElementById(
+    "chessboard-container"
+  );
+  const windowHeight = chessboardContainer
+    ? chessboardContainer.clientHeight
+    : 0;
+  const windowWidth = chessboardContainer ? chessboardContainer.clientWidth : 0;
+  const chessboard: HTMLElement | null = document.getElementById("chessboard");
+  if (chessboard)
+    chessboard.style.width =
+      calculateSize(windowWidth, windowHeight, props.rows, props.columns) +
+      "px";
+  console.log(
+    calculateSize(windowWidth, windowHeight, props.rows, props.columns) + "px"
+  );
+});
 const gridSize = props.rows;
 
 const pieces: string[] = ChessboardUtils.convertFENToArray(
@@ -63,44 +78,39 @@ const dropPiece = (e: MouseEvent) => {
 </script>
 
 <template>
-  <div
-    class="grid-container"
-    @mousedown="grabPiece"
-    @mousemove="movePiece"
-    @mouseup="dropPiece"
-  >
-    <ChessboardTile
-      v-for="(tile, index) in numOfTiles"
-      :color="ChessboardUtils.getTileColor(index, rows, columns)"
+  <div id="chessboard-container">
+    <div
+      id="chessboard"
+      @mousedown="grabPiece"
+      @mousemove="movePiece"
+      @mouseup="dropPiece"
     >
-      <div
-        v-if="pieces[index] !== ''"
-        class="piece"
-        :style="{
-          backgroundImage: `url(/images/${pieces[index]}.svg)`,
-        }"
-      ></div>
-
-      <!-- <div class="tile-text">
-          {{ tile }}
-        </div> -->
-    </ChessboardTile>
+      <ChessboardTile
+        v-for="(tile, index) in numOfTiles"
+        :color="ChessboardUtils.getTileColor(index, rows, columns)"
+      >
+      </ChessboardTile>
+      <template v-for="(tile, index) in numOfTiles">
+        <div
+          v-if="pieces[index] !== ''"
+          class="piece"
+          :style="{
+            backgroundImage: `url(/images/${pieces[index]}.svg)`,
+          }"
+        ></div>
+      </template>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.container {
-  max-width: 100vw;
-  max-height: auto;
-  display: flex;
-  flex-direction: column;
+#chessboard-container {
+  flex-grow: 1;
 }
-.grid-container {
+#chessboard {
   display: inline-grid;
   grid-template-columns: repeat(v-bind(gridSize), 1fr);
   margin: 0 auto;
-  width: 100%;
-  max-width: 600px;
   aspect-ratio: v-bind(rows) / v-bind(columns);
 }
 

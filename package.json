@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.6",
-    "@vueuse/core": "^9.6.0"
+    "@vueuse/core": "^9.6.0",
+    "vue-screen-size": "^2.0.4"
   }
 }
