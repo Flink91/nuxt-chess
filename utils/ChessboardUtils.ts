@@ -41,7 +41,7 @@ const convertFENToArray = (fen: string): string[] => {
   let i = 0;
 
   while (i < fen.length) {
-    console.log(fen.charAt(i), isNumber(fen.charAt(i)));
+    // console.log(fen.charAt(i), isNumber(fen.charAt(i)));
     if (isNumber(fen.charAt(i))) {
       let num: number = parseInt(fen.charAt(i));
       // if two digit number coming up

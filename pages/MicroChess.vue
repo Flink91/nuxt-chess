@@ -1,13 +1,10 @@
 <template>
   <div class="content">
-    <Chessboard
-      title="Micro Chess"
+    <Chessboard title="Micro Chess"
       description="Another chess variant on a 4×5 board, Microchess, was invented by Glimne in 1997. Castling is allowed in this variant."
-      :rows="7"
-      :columns="5"
-      :starting-position="startingFEN"
-    />
+      :rows="7" :columns="5" :starting-position="startingFEN" />
   </div>
+  <BoardSizeButtons />
 </template>
 
 <script setup lang="ts">
@@ -18,4 +15,5 @@ Empty squares are denoted by numbers from one to eight, depending on how many em
 const startingFEN = "knbr/p3/4/3P/RBNK";
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

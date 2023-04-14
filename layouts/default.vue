@@ -1,6 +1,7 @@
 <template>
   <div class="page">
-    <navbar />
+    <navbar />    
+    <subnavbar/>
     <slot />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChessboardTile from "./ChessboardTile.vue";
+// import ChessboardTile from "./ChessboardTile.vue";
 import * as ChessboardUtils from "~~/utils/ChessboardUtils";
 
 const props = defineProps<{
@@ -69,23 +69,11 @@ const dropPiece = (e: MouseEvent) => {
 
 <template>
   <div id="chessboard-container">
-    <div
-      id="chessboard"
-      @mousedown="grabPiece"
-      @mousemove="movePiece"
-      @mouseup="dropPiece"
-    >
-      <ChessboardTile
-        v-for="(tile, index) in numOfTiles"
-        :color="ChessboardUtils.getTileColor(index, rows, columns)"
-      >
-        <div
-          v-if="pieces[index] !== ''"
-          class="piece"
-          :style="{
-            backgroundImage: `url(/images/${pieces[index]}.svg)`,
-          }"
-        ></div>
+    <div id="chessboard" @mousedown="grabPiece" @mousemove="movePiece" @mouseup="dropPiece">
+      <ChessboardTile v-for="(tile, index) in numOfTiles" :color="ChessboardUtils.getTileColor(index, rows, columns)">
+        <div v-if="pieces[index] !== ''" class="piece" :style="{
+          backgroundImage: `url(/images/${pieces[index]}.svg)`,
+        }"></div>
       </ChessboardTile>
     </div>
   </div>
@@ -96,11 +84,13 @@ const dropPiece = (e: MouseEvent) => {
   flex-grow: 1;
   height: 100%;
 }
+
 #chessboard {
   display: inline-grid;
   grid-template-columns: repeat(v-bind(gridSize), 1fr);
   margin: 0 auto;
   aspect-ratio: v-bind(rows) / v-bind(columns);
+  width: -webkit-fill-available !important;
 }
 
 .grid {
@@ -127,6 +117,7 @@ const dropPiece = (e: MouseEvent) => {
   width: 80px;
   aspect-ratio: 1/1;
 }
+
 .piece:active {
   z-index: 99;
   cursor: grabbing;

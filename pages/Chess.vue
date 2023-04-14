@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-    <div>
       <Chessboard
         title="Chess"
         description="Normal Chess"
@@ -8,7 +7,6 @@
         :columns="8"
         :starting-position="startingFEN"
       />
-    </div>
   </div>
 </template>
 
