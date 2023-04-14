@@ -90,7 +90,7 @@ const dropPiece = (e: MouseEvent) => {
   grid-template-columns: repeat(v-bind(gridSize), 1fr);
   margin: 0 auto;
   aspect-ratio: v-bind(rows) / v-bind(columns);
-  width: -webkit-fill-available !important;
+  width: -webkit-fill-available;
 }
 
 .grid {
@@ -116,6 +116,7 @@ const dropPiece = (e: MouseEvent) => {
   height: 80px;
   width: 80px;
   aspect-ratio: 1/1;
+  background-position: center;
 }
 
 .piece:active {

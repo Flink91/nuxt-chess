@@ -1,5 +1,7 @@
 <template>
-  <div @click="tileClicked" class="tile" :class="color"><slot></slot></div>
+  <div @click="tileClicked" class="tile" :class="color">
+    <slot></slot>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -19,14 +21,14 @@ const tileClicked = () => {
   box-sizing: border-box;
   position: relative;
   display: flex;
-  justify-content: left;
-  align-items: left;
-  float: left;
+  justify-content: center;
+  align-items: center;
 }
 
 .light {
   background: antiquewhite;
 }
+
 .dark {
   background: burlywood;
 }
